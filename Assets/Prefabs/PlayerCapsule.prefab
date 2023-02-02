@@ -364,7 +364,8 @@ MonoBehaviour:
   crouchHeight: 0.5
   throwable: {fileID: 1220104500132215732, guid: 396951346500046408d2833540923591, type: 3}
   throwFrom: {fileID: 2125206947}
-  throwForce: 10
+  throwForce: 25
+  respawnPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &8318977651218210751
 GameObject:
   m_ObjectHideFlags: 0
