@@ -11,6 +11,7 @@ public class PlayerControlsAddon : MonoBehaviour
     public Transform throwFrom;
     public float throwForce;
     public Vector3 respawnPoint;
+    public Transform Head;
 
     // Start is called before the first frame update
     void Start()
