@@ -32,7 +32,7 @@ public class PlayerControlsAddon : MonoBehaviour
             gameObject.transform.localScale = new Vector3(transform.localScale.x, fullHeight, transform.localScale.z);
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             GameObject thrown = GameObject.Instantiate(throwable, throwFrom);
             thrown.transform.parent = null;
