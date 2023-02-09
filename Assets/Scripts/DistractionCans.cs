@@ -10,7 +10,7 @@ public class DistractionCans : MonoBehaviour
     public float range;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
     }
@@ -23,7 +23,7 @@ public class DistractionCans : MonoBehaviour
             {
                 if (Vector3.Distance(enemy.transform.position, gameObject.transform.position) <= range)
                 {
-                    enemy.transform.LookAt(gameObject.transform.position, Vector3.up);
+                    enemy.transform.LookAt(gameObject.transform.position);
                 }
             }
         }else if (collision.gameObject.CompareTag("Enemy"))

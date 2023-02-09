@@ -26,10 +26,8 @@ public class EnemyView : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             RaycastHit hit;
-            //Debug.DrawRay(Enemy.transform.position, other.transform.position - Enemy.transform.position);
             if(Physics.Raycast(Enemy.transform.position, other.GetComponent<PlayerControlsAddon>().Head.position - Enemy.transform.position, out hit))
             {
-                //Debug.Log(hit.collider.gameObject);
                 if (hit.collider.CompareTag("Player"))
                 {
                     rend.material = red;
