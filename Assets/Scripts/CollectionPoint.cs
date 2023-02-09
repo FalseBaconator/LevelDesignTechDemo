@@ -36,6 +36,10 @@ public class CollectionPoint : MonoBehaviour
         {
             GameObject.Destroy(gameObject.transform.GetChild(0).gameObject);
             timer = maxTime;
+            if (other.GetComponent<PlayerControlsAddon>().canThrow == false)
+            {
+                other.GetComponent<PlayerControlsAddon>().canThrow = true;
+            }
         }
     }
 

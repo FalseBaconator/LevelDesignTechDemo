@@ -13,6 +13,8 @@ public class PlayerControlsAddon : MonoBehaviour
     public Vector3 respawnPoint;
     public Transform Head;
 
+    public List<GameObject> thrownCans;
+    public bool canThrow = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,11 +34,19 @@ public class PlayerControlsAddon : MonoBehaviour
             gameObject.transform.localScale = new Vector3(transform.localScale.x, fullHeight, transform.localScale.z);
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && canThrow)
         {
+            canThrow = false;
             GameObject thrown = GameObject.Instantiate(throwable, throwFrom);
             thrown.transform.parent = null;
             thrown.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * throwForce, ForceMode.Impulse);
+            thrownCans.Add(thrown);
+            if(thrownCans.Count > 10)
+            {
+                GameObject toDelete = thrownCans[0];
+                thrownCans.RemoveAt(0);
+                GameObject.Destroy(toDelete);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.K))
