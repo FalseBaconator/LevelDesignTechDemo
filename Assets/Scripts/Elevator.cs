@@ -7,6 +7,7 @@ public class Elevator : MonoBehaviour
 
     public GameObject DoorTrigger;
     public GameObject ElevatorPhysical;
+    public GameObject Player;
     public Transform startPos;
     public Transform endPos;
     public string PlayerTag;
@@ -18,13 +19,13 @@ public class Elevator : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(PlayerTag))
+        if (other.gameObject == Player)
         {
 
             DoorTrigger.GetComponent<AutomaticDoor>().toOpen = false;
             DoorTrigger.GetComponent<AutomaticDoor>().toClose = true;
 
-            other.transform.parent = gameObject.transform;
+            Player.transform.parent = gameObject.transform.parent;
 
             if (atStart)
             {
@@ -44,22 +45,24 @@ public class Elevator : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.transform.parent == gameObject.transform)
+        if(other.transform.parent != null)
         {
-            other.transform.parent = null;
+            Player.transform.parent = null;
         }
     }
 
+
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(toEnd && DoorTrigger.GetComponent<AutomaticDoor>().toOpen == false && DoorTrigger.GetComponent<AutomaticDoor>().toClose == false)
         {
-            Debug.Log("Test");
-            
-            ElevatorPhysical.transform.Translate((endPos.position - ElevatorPhysical.transform.position).normalized * speed * Time.deltaTime);
-            if (ElevatorPhysical.transform.position == endPos.position)
+            //Player.transform.Translate((endPos.position - ElevatorPhysical.transform.position).normalized * speed * Time.fixedDeltaTime);
+            ElevatorPhysical.transform.Translate((endPos.position - ElevatorPhysical.transform.position).normalized * speed * Time.fixedDeltaTime);
+            //if (ElevatorPhysical.transform.position == endPos.position)
+            if(Vector3.Distance(ElevatorPhysical.transform.position, endPos.position) <= 1)
             {
+                ElevatorPhysical.transform.position = endPos.position;
                 toEnd = false;
                 atEnd = true;
                 DoorTrigger.GetComponent<AutomaticDoor>().toOpen = true;
@@ -69,11 +72,11 @@ public class Elevator : MonoBehaviour
         }
         else if (toStart && DoorTrigger.GetComponent<AutomaticDoor>().toOpen == false && DoorTrigger.GetComponent<AutomaticDoor>().toClose == false)
         {
-            Debug.Log("Test2");
-            
-            ElevatorPhysical.transform.Translate((startPos.position - ElevatorPhysical.transform.position).normalized * speed * Time.deltaTime);
-            if (ElevatorPhysical.transform.position == startPos.position)
+            //Player.transform.Translate((startPos.position - ElevatorPhysical.transform.position).normalized * speed * Time.fixedDeltaTime);
+            ElevatorPhysical.transform.Translate((startPos.position - ElevatorPhysical.transform.position).normalized * speed * Time.fixedDeltaTime);
+            if (Vector3.Distance(ElevatorPhysical.transform.position, startPos.position) <= 1)
             {
+                ElevatorPhysical.transform.position = startPos.position;
                 toStart = false;
                 atStart = true;
                 DoorTrigger.GetComponent<AutomaticDoor>().toOpen = true;
