@@ -39,6 +39,7 @@ public class CollectionPoint : MonoBehaviour
             if (other.GetComponent<PlayerControlsAddon>().canThrow == false)
             {
                 other.GetComponent<PlayerControlsAddon>().canThrow = true;
+                other.GetComponent<PlayerControlsAddon>().canThrowText.text = "can throw";
             }
         }
     }

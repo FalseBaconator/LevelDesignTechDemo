@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerControlsAddon : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class PlayerControlsAddon : MonoBehaviour
     public float throwForce;
     public Vector3 respawnPoint;
     public Transform Head;
+    public TextMeshProUGUI canThrowText;
 
     public List<GameObject> thrownCans;
     public bool canThrow = false;
@@ -20,6 +23,7 @@ public class PlayerControlsAddon : MonoBehaviour
     {
         fullHeight = gameObject.transform.localScale.y;
         respawnPoint = transform.position;
+        canThrowText.text = "cannot throw";
     }
 
     // Update is called once per frame
@@ -37,6 +41,7 @@ public class PlayerControlsAddon : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0) && canThrow)
         {
             canThrow = false;
+            canThrowText.text = "cannot throw";
             GameObject thrown = GameObject.Instantiate(throwable, throwFrom);
             thrown.transform.parent = null;
             thrown.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * throwForce, ForceMode.Impulse);
