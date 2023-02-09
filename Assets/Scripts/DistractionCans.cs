@@ -28,7 +28,7 @@ public class DistractionCans : MonoBehaviour
             }
         }else if (collision.gameObject.CompareTag("Enemy"))
         {
-            collision.transform.LookAt(GameObject.FindGameObjectWithTag("Player").transform.position);
+            collision.transform.LookAt(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlsAddon>().Head.position);
         }
     }
 }
