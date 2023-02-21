@@ -24,6 +24,7 @@ public class DistractionCans : MonoBehaviour
                 if (Vector3.Distance(enemy.transform.position, gameObject.transform.position) <= range)
                 {
                     enemy.transform.LookAt(gameObject.transform.position);
+                    enemy.transform.Rotate(-enemy.transform.rotation.eulerAngles.x, 0, 0);
                 }
             }
         }else if (collision.gameObject.CompareTag("Enemy"))
