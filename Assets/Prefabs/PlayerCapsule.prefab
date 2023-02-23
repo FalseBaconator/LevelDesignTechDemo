@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2125206947}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: ThrowFrom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,9 +43,9 @@ GameObject:
   - component: {fileID: 56572012504232702}
   - component: {fileID: 56572012504232703}
   - component: {fileID: 56572012504232688}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 84079654346259096}
   - component: {fileID: 4432924311656048360}
   - component: {fileID: 84079654346259099}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: PlayerCapsule
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -380,7 +380,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8318977651218210744}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlayerCameraRoot
   m_TagString: CinemachineTarget
   m_Icon: {fileID: 0}
@@ -497,6 +497,18 @@ PrefabInstance:
     - target: {fileID: 1459900207690009046, guid: 45097ee20fac10140919364b0f6b66d6, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1459900207690009046, guid: 45097ee20fac10140919364b0f6b66d6, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1459900208420249345, guid: 45097ee20fac10140919364b0f6b66d6, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1459900209617092265, guid: 45097ee20fac10140919364b0f6b66d6, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45097ee20fac10140919364b0f6b66d6, type: 3}

@@ -25,6 +25,7 @@ public class DistractionCans : MonoBehaviour
                 {
                     enemy.transform.LookAt(gameObject.transform.position);
                     enemy.transform.Rotate(-enemy.transform.rotation.eulerAngles.x, 0, 0);
+                    enemy.GetComponent<EnemyMove>().State = EnemyMove.StateType.Distracted;
                 }
             }
         }else if (collision.gameObject.CompareTag("Enemy"))

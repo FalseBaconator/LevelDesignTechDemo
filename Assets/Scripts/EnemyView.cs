@@ -11,8 +11,6 @@ public class EnemyView : MonoBehaviour
     public Material red;
     public Material green;
 
-    //public LayerMask ignoreLayer;
-
     MeshRenderer rend;
 
     private void Start()
@@ -31,6 +29,7 @@ public class EnemyView : MonoBehaviour
                 if (hit.collider.CompareTag("Player"))
                 {
                     rend.material = red;
+                    Enemy.GetComponent<EnemyMove>().State = EnemyMove.StateType.Chasing;
                 }
                 else
                 {
