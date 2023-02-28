@@ -52,25 +52,43 @@ public class EnemyMove : MonoBehaviour
 
     public float timer;
 
+    public float visionDist;
+
+    public float visionAngle;
+
     public Vector3 lastPatrolSpot;
+
+    public Light light;
 
     public StateType State{ get => state; set {
             if(state == StateType.Patrolling)
             {
                 lastPatrolSpot = transform.position;
             }
+            if(value == StateType.Chasing)
+            {
+                light.color = Color.red;
+            }
             if(value == StateType.Distracted)
             {
                 timer = distractedTime;
+                light.color = Color.white;
             }
             if(value == StateType.Searching)
             {
                 startAngle = transform.rotation.eulerAngles.y;
                 timer = searchTime;
+                light.color = Color.red;
             }
             if(value == StateType.Patrolling)
             {
                 agent.SetDestination(targets[targetIndex].transform.position);
+                light.color = Color.white;
+            }
+            if(value == StateType.Retreating)
+            {
+                agent.SetDestination(lastPatrolSpot);
+                light.color = Color.white;
             }
             state = value;
         }
@@ -86,7 +104,9 @@ public class EnemyMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (toDebug) Debug.Log(State);
+        if (toDebug) Debug.Log(Vector3.Angle(player.transform.position - transform.position, transform.forward));
+
+        //if (toDebug) Debug.Log(State);
 
         if (State == StateType.Patrolling)
         {
@@ -99,26 +119,30 @@ public class EnemyMove : MonoBehaviour
                 }
                 agent.SetDestination(targets[targetIndex].transform.position);
             }
+            if (CheckVision())
+            {
+                State = StateType.Chasing;
+            }
         }
         else if (State == StateType.Chasing)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
+            if (CheckVision())
             {
-                if (hit.collider.CompareTag("Player"))
-                {
-                    agent.SetDestination(hit.transform.position);
-                }
-                else
-                {
-                    State = StateType.StartSearching;
-                }
+                agent.SetDestination(player.transform.position);
+            }
+            else
+            {
+                State = StateType.StartSearching;
             }
         }
         else if (State == StateType.StartSearching)
         {
             if (Vector3.Distance(transform.position, agent.destination) <= distFromTarget)
                 State = StateType.Searching;
+            if (CheckVision())
+            {
+                State = StateType.Chasing;
+            }
         }
         else if (State == StateType.Searching)
         {
@@ -128,7 +152,6 @@ public class EnemyMove : MonoBehaviour
                 timer = 0;
                 State = StateType.Retreating;
             }
-            //Debug.Log(Mathf.Abs(transform.rotation.eulerAngles.y - startAngle) + " || " + searchAngle);
             if (rDir == RotateDir.Left)
             {
                 transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
@@ -145,6 +168,10 @@ public class EnemyMove : MonoBehaviour
                     rDir = RotateDir.Left;
                 }
             }
+            if (CheckVision())
+            {
+                State = StateType.Chasing;
+            }
         }
         else if (State == StateType.Distracted)
         {
@@ -157,11 +184,38 @@ public class EnemyMove : MonoBehaviour
         }
         else if (State == StateType.Retreating)
         {
-            agent.SetDestination(lastPatrolSpot);
             if (Vector3.Distance(transform.position, agent.destination) <= distFromTarget)
             {
                 State = StateType.Patrolling;
             }
+            if (CheckVision())
+            {
+                State = StateType.Chasing;
+            }
         }
     }
+
+
+    bool CheckVision()
+    {
+        if(Vector3.Distance(transform.position, player.transform.position) <= visionDist)
+        {
+            if(Mathf.Abs(Vector3.Angle(player.transform.position - transform.position, transform.forward)) <= visionAngle)
+            {
+                
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
+                {
+                    if (hit.collider.CompareTag("Player"))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+
 }
