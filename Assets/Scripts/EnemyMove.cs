@@ -104,7 +104,7 @@ public class EnemyMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (toDebug) Debug.Log(Vector3.Angle(player.transform.position - transform.position, transform.forward));
+        //if (toDebug) Debug.Log(Vector3.Angle(player.transform.position - transform.position, transform.forward));
 
         //if (toDebug) Debug.Log(State);
 
@@ -126,14 +126,18 @@ public class EnemyMove : MonoBehaviour
         }
         else if (State == StateType.Chasing)
         {
-            if (CheckVision())
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
             {
-                agent.SetDestination(player.transform.position);
-            }
-            else
-            {
-                State = StateType.StartSearching;
-            }
+                if (hit.collider.CompareTag("Player"))
+                {
+                    agent.SetDestination(player.transform.position);
+                }
+                else
+                {
+                    State = StateType.StartSearching;
+                }
+            }            
         }
         else if (State == StateType.StartSearching)
         {
