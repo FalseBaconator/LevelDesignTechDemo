@@ -129,7 +129,7 @@ public class EnemyMove : MonoBehaviour
                 break;
             case StateType.Chasing:
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
+                if (Physics.Raycast(flashlight.transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
                 {
                     if (hit.collider.CompareTag("Player"))
                         agent.SetDestination(player.transform.position);
@@ -147,6 +147,7 @@ public class EnemyMove : MonoBehaviour
                 break;
             case StateType.Searching:
                 timer -= Time.deltaTime;
+                float num = transform.rotation.eulerAngles.y - startAngle;
                 if (timer <= 0)
                 {
                     timer = 0;
@@ -155,13 +156,26 @@ public class EnemyMove : MonoBehaviour
                 if (rDir == RotateDir.Left)
                 {
                     transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
-                    if (360 - transform.rotation.eulerAngles.y - startAngle >= searchAngle)
+                    
+                    if (num > searchAngle * 2)
+                        num -= 360;
+                    if (num < -searchAngle * 2)
+                        num += 360;
+                    if (toDebug)
+                        Debug.Log(num + " Left");
+                    if (num <= -searchAngle)
                         rDir = RotateDir.Right;
                 }
                 else if (rDir == RotateDir.Right)
                 {
                     transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
-                    if (transform.rotation.eulerAngles.y - startAngle >= searchAngle)
+                    if (num > searchAngle * 2)
+                        num -= 360;
+                    if (num < -searchAngle * 2)
+                        num += 360;
+                    if (toDebug)
+                        Debug.Log(num + " Right");
+                    if (num >= searchAngle)
                         rDir = RotateDir.Left;
                 }
                 if (toDistract)
@@ -203,9 +217,8 @@ public class EnemyMove : MonoBehaviour
         {
             if(Mathf.Abs(Vector3.Angle(player.transform.position - transform.position, transform.forward)) <= visionAngle)
             {
-                
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
+                if (Physics.Raycast(flashlight.transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
                 {
                     if (hit.collider.CompareTag("Player"))
                     {

@@ -454,7 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f695053d55dd3b46a47247d111501cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toDebug: 0
+  toDebug: 1
   agent: {fileID: -795077269106197276}
   targetParent: {fileID: 3570751300214203567}
   targets:
@@ -465,7 +465,7 @@ MonoBehaviour:
   - {fileID: 8034835813411142893}
   - {fileID: 3576842056786984848}
   distFromTarget: 2
-  searchAngle: 90
+  searchAngle: 45
   startAngle: 0
   rotateSpeed: 15
   distractedTime: 10
