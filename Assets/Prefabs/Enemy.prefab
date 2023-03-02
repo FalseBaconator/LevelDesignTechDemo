@@ -118,7 +118,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3554015620242157125}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -138,12 +138,12 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 50
-  m_Range: 10
+  m_Range: 20
   m_SpotAngle: 45
   m_InnerSpotAngle: 4
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -430,7 +430,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -471,10 +471,11 @@ MonoBehaviour:
   distractedTime: 10
   searchTime: 15
   timer: 0
-  visionDist: 10
+  visionDist: 20
   visionAngle: 20
+  hearingDist: 20
   lastPatrolSpot: {x: 0, y: 0, z: 0}
-  light: {fileID: 3054622367890074323}
+  flashlight: {fileID: 3054622367890074323}
 --- !u!1001 &8762234314280510722
 PrefabInstance:
   m_ObjectHideFlags: 0

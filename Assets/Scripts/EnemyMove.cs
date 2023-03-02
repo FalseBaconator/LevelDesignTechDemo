@@ -56,9 +56,15 @@ public class EnemyMove : MonoBehaviour
 
     public float visionAngle;
 
+    public float hearingDist;
+
     public Vector3 lastPatrolSpot;
 
-    public Light light;
+    public Light flashlight;
+
+    private Vector3 distractSpot;
+
+    private bool toDistract;
 
     public StateType State{ get => state; set {
             if(state == StateType.Patrolling)
@@ -67,28 +73,30 @@ public class EnemyMove : MonoBehaviour
             }
             if(value == StateType.Chasing)
             {
-                light.color = Color.red;
+                flashlight.color = Color.red;
             }
             if(value == StateType.Distracted)
             {
+                transform.LookAt(distractSpot);
+                transform.Rotate(-transform.rotation.eulerAngles.x, 0, 0);
+                agent.ResetPath();
                 timer = distractedTime;
-                light.color = Color.white;
             }
             if(value == StateType.Searching)
             {
                 startAngle = transform.rotation.eulerAngles.y;
                 timer = searchTime;
-                light.color = Color.red;
+                flashlight.color = Color.red;
             }
             if(value == StateType.Patrolling)
             {
                 agent.SetDestination(targets[targetIndex].transform.position);
-                light.color = Color.white;
+                flashlight.color = Color.white;
             }
             if(value == StateType.Retreating)
             {
                 agent.SetDestination(lastPatrolSpot);
-                light.color = Color.white;
+                flashlight.color = Color.white;
             }
             state = value;
         }
@@ -104,101 +112,90 @@ public class EnemyMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (toDebug) Debug.Log(Vector3.Angle(player.transform.position - transform.position, transform.forward));
+        switch (State) 
+        {
+            case StateType.Patrolling:
+                if (Vector3.Distance(transform.position, targets[targetIndex].transform.position) <= distFromTarget)
+                {
+                    targetIndex++;
+                    if (targetIndex >= targets.Length)
+                        targetIndex = 0;
+                    agent.SetDestination(targets[targetIndex].transform.position);
+                }
+                if (toDistract)
+                    State = StateType.Distracted;
+                if (CheckVision())
+                    State = StateType.Chasing;
+                break;
+            case StateType.Chasing:
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
+                {
+                    if (hit.collider.CompareTag("Player"))
+                        agent.SetDestination(player.transform.position);
+                    else
+                        State = StateType.StartSearching;
+                }
+                break;
+            case StateType.StartSearching:
+                if (Vector3.Distance(transform.position, agent.destination) <= distFromTarget)
+                    State = StateType.Searching;
+                if (toDistract)
+                    State = StateType.Distracted;
+                if (CheckVision())
+                    State = StateType.Chasing;
+                break;
+            case StateType.Searching:
+                timer -= Time.deltaTime;
+                if (timer <= 0)
+                {
+                    timer = 0;
+                    State = StateType.Retreating;
+                }
+                if (rDir == RotateDir.Left)
+                {
+                    transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
+                    if (360 - transform.rotation.eulerAngles.y - startAngle >= searchAngle)
+                        rDir = RotateDir.Right;
+                }
+                else if (rDir == RotateDir.Right)
+                {
+                    transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
+                    if (transform.rotation.eulerAngles.y - startAngle >= searchAngle)
+                        rDir = RotateDir.Left;
+                }
+                if (toDistract)
+                    State = StateType.Distracted;
+                if (CheckVision())
+                    State = StateType.Chasing;
+                break;
+            case StateType.Distracted:
+                timer -= Time.deltaTime;
+                if (timer <= 0)
+                    State = StateType.Retreating;
+                if (CheckVision())
+                    State = StateType.Chasing;
+                break;
+            case StateType.Retreating:
+                if (Vector3.Distance(transform.position, agent.destination) <= distFromTarget)
+                    State = StateType.Patrolling;
+                if (toDistract)
+                    State = StateType.Distracted;
+                if (CheckVision())
+                    State = StateType.Chasing;
+                break;
+        }
 
-        //if (toDebug) Debug.Log(State);
-
-        if (State == StateType.Patrolling)
-        {
-            if (Vector3.Distance(transform.position, targets[targetIndex].transform.position) <= distFromTarget)
-            {
-                targetIndex++;
-                if (targetIndex >= targets.Length)
-                {
-                    targetIndex = 0;
-                }
-                agent.SetDestination(targets[targetIndex].transform.position);
-            }
-            if (CheckVision())
-            {
-                State = StateType.Chasing;
-            }
-        }
-        else if (State == StateType.Chasing)
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
-            {
-                if (hit.collider.CompareTag("Player"))
-                {
-                    agent.SetDestination(player.transform.position);
-                }
-                else
-                {
-                    State = StateType.StartSearching;
-                }
-            }            
-        }
-        else if (State == StateType.StartSearching)
-        {
-            if (Vector3.Distance(transform.position, agent.destination) <= distFromTarget)
-                State = StateType.Searching;
-            if (CheckVision())
-            {
-                State = StateType.Chasing;
-            }
-        }
-        else if (State == StateType.Searching)
-        {
-            timer -= Time.deltaTime;
-            if (timer <= 0)
-            {
-                timer = 0;
-                State = StateType.Retreating;
-            }
-            if (rDir == RotateDir.Left)
-            {
-                transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
-                if (360 - transform.rotation.eulerAngles.y - startAngle >= searchAngle)
-                {
-                    rDir = RotateDir.Right;
-                }
-            }
-            else if (rDir == RotateDir.Right)
-            {
-                transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
-                if (transform.rotation.eulerAngles.y - startAngle >= searchAngle)
-                {
-                    rDir = RotateDir.Left;
-                }
-            }
-            if (CheckVision())
-            {
-                State = StateType.Chasing;
-            }
-        }
-        else if (State == StateType.Distracted)
-        {
-            timer -= Time.deltaTime;
-            agent.ResetPath();
-            if (timer <= 0)
-            {
-                State = StateType.Retreating;
-            }
-        }
-        else if (State == StateType.Retreating)
-        {
-            if (Vector3.Distance(transform.position, agent.destination) <= distFromTarget)
-            {
-                State = StateType.Patrolling;
-            }
-            if (CheckVision())
-            {
-                State = StateType.Chasing;
-            }
-        }
+        if(toDistract)
+            toDistract = false;
     }
 
+    public void DistractAtLocation(Vector3 loc)
+    {
+        distractSpot = loc;
+        if (Vector3.Distance(distractSpot, transform.position) <= hearingDist)
+            toDistract = true;
+    }
 
     bool CheckVision()
     {

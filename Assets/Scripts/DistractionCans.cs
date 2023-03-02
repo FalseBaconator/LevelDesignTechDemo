@@ -21,16 +21,11 @@ public class DistractionCans : MonoBehaviour
         {
             foreach (GameObject enemy in enemies)
             {
-                if (Vector3.Distance(enemy.transform.position, gameObject.transform.position) <= range)
-                {
-                    enemy.transform.LookAt(gameObject.transform.position);
-                    enemy.transform.Rotate(-enemy.transform.rotation.eulerAngles.x, 0, 0);
-                    enemy.GetComponent<EnemyMove>().State = EnemyMove.StateType.Distracted;
-                }
+                enemy.GetComponent<EnemyMove>().DistractAtLocation(gameObject.transform.position);
             }
         }else if (collision.gameObject.CompareTag("Enemy"))
         {
-            collision.transform.LookAt(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlsAddon>().Head.position);
+            collision.gameObject.transform.LookAt(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlsAddon>().Head.position);
         }
     }
 }
