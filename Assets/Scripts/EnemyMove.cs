@@ -77,8 +77,7 @@ public class EnemyMove : MonoBehaviour
             }
             if(value == StateType.Distracted)
             {
-                transform.LookAt(distractSpot);
-                transform.Rotate(-transform.rotation.eulerAngles.x, 0, 0);
+                
                 agent.ResetPath();
                 timer = distractedTime;
             }
@@ -185,6 +184,8 @@ public class EnemyMove : MonoBehaviour
                 break;
             case StateType.Distracted:
                 timer -= Time.deltaTime;
+                transform.LookAt(distractSpot);
+                transform.Rotate(-transform.rotation.eulerAngles.x, 0, 0);
                 if (timer <= 0)
                     State = StateType.Retreating;
                 if (CheckVision())
