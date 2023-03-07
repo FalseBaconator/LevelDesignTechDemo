@@ -77,7 +77,7 @@ public class EnemyMove : MonoBehaviour
             }
             if(value == StateType.Distracted)
             {
-                
+                flashlight.color = Color.green;
                 agent.ResetPath();
                 timer = distractedTime;
             }
@@ -85,7 +85,7 @@ public class EnemyMove : MonoBehaviour
             {
                 startAngle = transform.rotation.eulerAngles.y;
                 timer = searchTime;
-                flashlight.color = Color.red;
+                flashlight.color = Color.yellow;
             }
             if(value == StateType.Patrolling)
             {
@@ -95,7 +95,7 @@ public class EnemyMove : MonoBehaviour
             if(value == StateType.Retreating)
             {
                 agent.SetDestination(lastPatrolSpot);
-                flashlight.color = Color.white;
+                flashlight.color = Color.cyan;
             }
             state = value;
         }
