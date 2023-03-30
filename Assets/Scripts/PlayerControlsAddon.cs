@@ -75,6 +75,7 @@ public class PlayerControlsAddon : MonoBehaviour
 
     public void Kill()
     {
+        GameObject.FindObjectOfType<GameManager>().Restart();
         Teleport(respawnPoint);
     }
 

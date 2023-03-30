@@ -72,35 +72,33 @@ public class EnemyMove : MonoBehaviour
             {
                 lastPatrolSpot = transform.position;//Saves where the enemy stopped patrolling
             }
-            if(value == StateType.Chasing)
+            switch (value)
             {
-                flashlight.color = Color.red;
-            }
-            if(value == StateType.Distracted)
-            {
-                //Stops moving and starts timer
-                flashlight.color = Color.green;
-                agent.ResetPath();
-                timer = distractedTime;
-            }
-            if(value == StateType.Searching)
-            {
-                //Saves the angle they started at and starts timer
-                startAngle = transform.rotation.eulerAngles.y;
-                timer = searchTime;
-                flashlight.color = Color.yellow;
-            }
-            if(value == StateType.Patrolling)
-            {
-                //Sets the destination they were following when they stopped
-                agent.SetDestination(targets[targetIndex].transform.position);
-                flashlight.color = Color.white;
-            }
-            if(value == StateType.Retreating)
-            {
-                //Go back to where they stopped patrolling
-                agent.SetDestination(lastPatrolSpot);
-                flashlight.color = Color.cyan;
+                case StateType.Chasing:
+                    flashlight.color = Color.red;
+                    break;
+                case StateType.Distracted:
+                    //Stops moving and starts timer
+                    flashlight.color = Color.green;
+                    agent.ResetPath();
+                    timer = distractedTime;
+                    break;
+                case StateType.Searching:
+                    //Saves the angle they started at and starts timer
+                    startAngle = transform.rotation.eulerAngles.y;
+                    timer = searchTime;
+                    flashlight.color = Color.yellow;
+                    break;
+                case StateType.Patrolling:
+                    //Sets the destination they were following when they stopped
+                    agent.SetDestination(targets[targetIndex].transform.position);
+                    flashlight.color = Color.white;
+                    break;
+                case StateType.Retreating:
+                    //Go back to where they stopped patrolling
+                    agent.SetDestination(lastPatrolSpot);
+                    flashlight.color = Color.cyan;
+                    break;
             }
             state = value;
         }
@@ -139,7 +137,7 @@ public class EnemyMove : MonoBehaviour
                 if (Physics.Raycast(flashlight.transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit))
                 {
                     //Chases after player until line of sight with player is lost
-                    if (hit.collider.CompareTag("Player"))
+                    if (hit.collider.CompareTag("PlayerBody"))
                         agent.SetDestination(player.transform.position);
                     else
                         State = StateType.StartSearching;
@@ -245,7 +243,7 @@ public class EnemyMove : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(flashlight.transform.position, player.GetComponent<PlayerControlsAddon>().Head.position - transform.position, out hit)) //Checks if player is blocked from view
                 {
-                    if (hit.collider.CompareTag("Player"))
+                    if (hit.collider.CompareTag("PlayerBody"))
                     {
                         return true;    //Player is visible
                     }

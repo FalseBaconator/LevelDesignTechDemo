@@ -51,6 +51,15 @@ public class Elevator : MonoBehaviour
         }
     }
 
+    public void Restart()
+    {
+        if(atStart == false)
+        {
+            atStart = true;
+            ElevatorPhysical.transform.position = startPos.position;
+        }
+    }
+
 
     // Update is called once per frame
     void FixedUpdate()

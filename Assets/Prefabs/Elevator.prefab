@@ -371,7 +371,7 @@ GameObject:
   - component: {fileID: 208653772360250767}
   m_Layer: 0
   m_Name: ElevatorTrigger
-  m_TagString: Untagged
+  m_TagString: ElevatorTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -702,7 +702,7 @@ GameObject:
   - component: {fileID: 208653772994791441}
   m_Layer: 0
   m_Name: Elevator
-  m_TagString: Untagged
+  m_TagString: Elevator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

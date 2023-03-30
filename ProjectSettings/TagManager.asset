@@ -6,6 +6,9 @@ TagManager:
   tags:
   - CinemachineTarget
   - Enemy
+  - PlayerBody
+  - Elevator
+  - ElevatorTrigger
   layers:
   - Default
   - TransparentFX
