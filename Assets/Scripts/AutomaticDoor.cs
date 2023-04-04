@@ -13,6 +13,8 @@ public class AutomaticDoor : MonoBehaviour
     public bool toOpen = false;
     public bool toClose = false;
     public string playerTag;
+    public AudioClip audioClip;
+    public AudioSource audioSource;
 
     private void Start()
     {
@@ -51,11 +53,17 @@ public class AutomaticDoor : MonoBehaviour
 
         if (toOpen)
         {
+            if(audioSource.isPlaying == false)
+            {
+                audioSource.clip = audioClip;
+                audioSource.Play();
+            }
             DoorLeft.transform.position = new Vector3(DoorLeft.transform.position.x, DoorLeft.transform.position.y, DoorLeft.transform.position.z - speed * Time.deltaTime);
             if (DoorLeft.transform.position.z < LeftPos.z - dist)
             {
                 DoorLeft.transform.position = new Vector3(DoorLeft.transform.position.x, DoorLeft.transform.position.y, LeftPos.z - dist);
                 toOpen = false;
+                audioSource.Stop();
             }
 
             DoorRight.transform.position = new Vector3(DoorRight.transform.position.x, DoorRight.transform.position.y, DoorRight.transform.position.z + speed * Time.deltaTime);
@@ -63,16 +71,23 @@ public class AutomaticDoor : MonoBehaviour
             {
                 DoorRight.transform.position = new Vector3(DoorRight.transform.position.x, DoorRight.transform.position.y, RightPos.z + dist);
                 toOpen = false;
+                audioSource.Stop();
             }
         }
 
         if (toClose)
         {
+            if (audioSource.isPlaying == false)
+            {
+                audioSource.clip = audioClip;
+                audioSource.Play();
+            }
             DoorLeft.transform.position = new Vector3(DoorLeft.transform.position.x, DoorLeft.transform.position.y, DoorLeft.transform.position.z + speed * Time.deltaTime);
             if (DoorLeft.transform.position.z > LeftPos.z)
             {
                 DoorLeft.transform.position = new Vector3(DoorLeft.transform.position.x, DoorLeft.transform.position.y, LeftPos.z);
                 toClose = false;
+                audioSource.Stop();
             }
 
             DoorRight.transform.position = new Vector3(DoorRight.transform.position.x, DoorRight.transform.position.y, DoorRight.transform.position.z - speed * Time.deltaTime);
@@ -80,6 +95,7 @@ public class AutomaticDoor : MonoBehaviour
             {
                 DoorRight.transform.position = new Vector3(DoorRight.transform.position.x, DoorRight.transform.position.y, RightPos.z);
                 toClose = false;
+                audioSource.Stop();
             }
         }
     }

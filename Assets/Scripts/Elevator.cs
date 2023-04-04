@@ -16,6 +16,8 @@ public class Elevator : MonoBehaviour
     public bool atEnd;
     public bool toStart;
     public bool toEnd;
+    public AudioClip audioClip;
+    public AudioSource audioSource;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -40,6 +42,10 @@ public class Elevator : MonoBehaviour
                 toStart = true;
                 toEnd = false;
             }
+
+            audioSource.clip = audioClip;
+            audioSource.Play();
+
         }
     }
 
@@ -77,6 +83,7 @@ public class Elevator : MonoBehaviour
                 DoorTrigger.GetComponent<AutomaticDoor>().toOpen = true;
                 DoorTrigger.GetComponent<AutomaticDoor>().toClose = false;
                 DoorTrigger.GetComponent<AutomaticDoor>().resetPos();
+                audioSource.Stop();
             }
         }
         else if (toStart && DoorTrigger.GetComponent<AutomaticDoor>().toOpen == false && DoorTrigger.GetComponent<AutomaticDoor>().toClose == false)
@@ -91,6 +98,7 @@ public class Elevator : MonoBehaviour
                 DoorTrigger.GetComponent<AutomaticDoor>().toOpen = true;
                 DoorTrigger.GetComponent<AutomaticDoor>().toClose = false;
                 DoorTrigger.GetComponent<AutomaticDoor>().resetPos();
+                audioSource.Stop();
             }
         }
     }

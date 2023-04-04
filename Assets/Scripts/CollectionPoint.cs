@@ -8,6 +8,9 @@ public class CollectionPoint : MonoBehaviour
     public GameObject collectible;
     public float timer;
     private float maxTime;
+    public AudioClip clip;
+    public AudioSource source;
+
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +43,8 @@ public class CollectionPoint : MonoBehaviour
             {
                 other.GetComponent<PlayerControlsAddon>().canThrow = true;
                 other.GetComponent<PlayerControlsAddon>().canThrowText.text = "can throw";
+                source.clip = clip;
+                source.Play();
             }
         }
     }

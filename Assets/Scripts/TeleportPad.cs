@@ -10,6 +10,9 @@ public class TeleportPad : MonoBehaviour
 
     Vector3 targetPos;
 
+    public AudioClip clip;
+    public AudioSource source;
+
     private void Start()
     {
         targetPos = targetObj.transform.position;
@@ -21,6 +24,10 @@ public class TeleportPad : MonoBehaviour
         {
             other.GetComponent<PlayerControlsAddon>().Teleport(targetPos);
             canTeleport = false;
+            source.clip = clip;
+            source.Play();
+            targetObj.GetComponent<AudioSource>().clip = clip;
+            targetObj.GetComponent<AudioSource>().Play();
         }
     }
 
