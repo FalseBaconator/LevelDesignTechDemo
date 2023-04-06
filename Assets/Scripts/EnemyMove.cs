@@ -24,6 +24,25 @@ public class EnemyMove : MonoBehaviour
         Left
     }
 
+    public enum Actor
+    {
+        RWohler,
+        RMartel
+    }
+
+    public Actor actor;
+
+    public AudioClip[] RWDistracts; //Wohler Lines
+    public AudioClip[] RWSearches;
+    public AudioClip[] RWSpots;
+    public AudioClip[] RWRetreats;
+    public AudioClip[] RMDistracts; //Martel Lines
+    public AudioClip[] RMSearches;
+    public AudioClip[] RMSpots;
+    public AudioClip[] RMRetreats;
+
+    public AudioSource speaker;
+
     StateType state = StateType.Patrolling;
 
     RotateDir rDir = RotateDir.Left;
@@ -68,23 +87,32 @@ public class EnemyMove : MonoBehaviour
 
     //Code that runs whenever the state changes | Changes flashlight color to match state
     public StateType State{ get => state; set {
-            if(state == StateType.Patrolling)
+            if (state == StateType.Patrolling)
             {
                 lastPatrolSpot = transform.position;//Saves where the enemy stopped patrolling
             }
             switch (value)
             {
                 case StateType.Chasing:
+                    if (actor == EnemyMove.Actor.RWohler) speaker.clip = RWSpots[Random.Range(0, RWSpots.Length)];
+                    else if (actor == EnemyMove.Actor.RMartel) speaker.clip = RMSpots[Random.Range(0, RMSpots.Length)];
+                    speaker.Play();
                     flashlight.color = Color.red;
                     break;
                 case StateType.Distracted:
                     //Stops moving and starts timer
+                    if (actor == EnemyMove.Actor.RWohler) speaker.clip = RWDistracts[Random.Range(0, RWDistracts.Length)];
+                    else if (actor == EnemyMove.Actor.RMartel) speaker.clip = RMDistracts[Random.Range(0, RMDistracts.Length)];
+                    speaker.Play();
                     flashlight.color = Color.green;
                     agent.ResetPath();
                     timer = distractedTime;
                     break;
                 case StateType.Searching:
                     //Saves the angle they started at and starts timer
+                    if (actor == EnemyMove.Actor.RWohler) speaker.clip = RWSearches[Random.Range(0, RWSearches.Length)];
+                    else if (actor == EnemyMove.Actor.RMartel) speaker.clip = RMSearches[Random.Range(0, RMSearches.Length)];
+                    speaker.Play();
                     startAngle = transform.rotation.eulerAngles.y;
                     timer = searchTime;
                     flashlight.color = Color.yellow;
@@ -96,6 +124,9 @@ public class EnemyMove : MonoBehaviour
                     break;
                 case StateType.Retreating:
                     //Go back to where they stopped patrolling
+                    if (actor == EnemyMove.Actor.RWohler) speaker.clip = RWRetreats[Random.Range(0, RWRetreats.Length)];
+                    else if (actor == EnemyMove.Actor.RMartel) speaker.clip = RMRetreats[Random.Range(0, RMRetreats.Length)];
+                    speaker.Play();
                     agent.SetDestination(lastPatrolSpot);
                     flashlight.color = Color.cyan;
                     break;

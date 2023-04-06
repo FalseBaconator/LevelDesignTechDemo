@@ -6,8 +6,10 @@ public class DistractionCans : MonoBehaviour
 {
 
     private GameObject[] enemies;
-    private List<GameObject> cans;
+    //private List<GameObject> cans;
     public float range;
+    public AudioClip[] noises;
+    public AudioSource source;
 
     // Start is called before the first frame update
     void Awake()
@@ -17,6 +19,8 @@ public class DistractionCans : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        source.clip = noises[Random.Range(0, noises.Length)];
+        source.Play();
         if (collision.gameObject.CompareTag("Player") == false && collision.gameObject.CompareTag("Enemy") == false)    //If it hits a wall or furniture
         {
             foreach (GameObject enemy in enemies)
