@@ -67,6 +67,11 @@ public class Elevator : MonoBehaviour
     }
 
 
+    public void Start()
+    {
+        Player = GameObject.FindGameObjectWithTag(PlayerTag);
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
