@@ -83,13 +83,17 @@ public class EnemyMove : MonoBehaviour
 
     private Vector3 distractSpot;
 
-    private bool toDistract;
+    private bool toDistract = false;
+
+    private bool toRestart = false;
 
     //Code that runs whenever the state changes | Changes flashlight color to match state
     public StateType State{ get => state; set {
             if (state == StateType.Patrolling)
             {
                 lastPatrolSpot = transform.position;//Saves where the enemy stopped patrolling
+                if (toRestart)
+                    toRestart = false;
             }
             switch (value)
             {
@@ -173,6 +177,8 @@ public class EnemyMove : MonoBehaviour
                     else
                         State = StateType.StartSearching;
                 }
+                if (toRestart)
+                    State = StateType.Retreating;
                 break;
             case StateType.StartSearching:
                 //The target stays the same as from the chasing state
@@ -184,6 +190,8 @@ public class EnemyMove : MonoBehaviour
                     State = StateType.Distracted;
                 if (CheckVision())
                     State = StateType.Chasing;
+                if (toRestart)
+                    State = StateType.Retreating;
                 break;
             case StateType.Searching:
                 timer -= Time.deltaTime;
@@ -228,6 +236,8 @@ public class EnemyMove : MonoBehaviour
                     State = StateType.Distracted;
                 if (CheckVision())
                     State = StateType.Chasing;
+                if (toRestart)
+                    State = StateType.Retreating;
                 break;
             case StateType.Distracted:
                 timer -= Time.deltaTime;
@@ -239,6 +249,8 @@ public class EnemyMove : MonoBehaviour
                     State = StateType.Retreating;
                 if (CheckVision())
                     State = StateType.Chasing;
+                if (toRestart)
+                    State = StateType.Retreating;
                 break;
             case StateType.Retreating:
                 //Go back to where they stopped patrolling, and change state when appropriate
@@ -264,6 +276,12 @@ public class EnemyMove : MonoBehaviour
         if (Vector3.Distance(distractSpot, transform.position) <= hearingDist)
             toDistract = true;
     }
+
+    public void Restart()
+    {
+        toRestart = true;
+    }
+
 
     bool CheckVision()
     {

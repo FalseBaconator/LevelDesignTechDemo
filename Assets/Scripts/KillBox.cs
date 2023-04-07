@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class KillBox : MonoBehaviour
 {
+    public string playerTag;
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(playerTag))
         {
             other.GetComponent<PlayerControlsAddon>().Kill();
         }
